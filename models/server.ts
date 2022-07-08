@@ -1,5 +1,6 @@
 import express, { Application } from 'express'
 import userRoutes from '../routes/usuario'
+import cors from 'cors'
 
 class Server {
   //En TS se deben definir los atributos
@@ -13,8 +14,24 @@ class Server {
     this.app = express()
     this.port = process.env.PORT || '8000'
 
+    //Llamar los middlewares
+    this.middlewares()
+
     //Definir las rutas
     this.routes()
+  }
+
+  //TODO: conectar BD
+
+  middlewares() {
+    //CORS
+    this.app.use(cors())
+
+    //Body Parser
+    this.app.use(express.json())
+
+    //Carpeta pública
+    this.app.use(express.static('public'))
   }
 
   routes() {
