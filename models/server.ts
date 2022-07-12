@@ -1,6 +1,7 @@
 import express, { Application } from 'express'
 import userRoutes from '../routes/usuario'
 import cors from 'cors'
+import db from '../db/connection'
 
 class Server {
   //En TS se deben definir los atributos
@@ -14,14 +15,20 @@ class Server {
     this.app = express()
     this.port = process.env.PORT || '8000'
 
-    //Llamar los middlewares
+    //Métodos iniciales
+    this.dbConnection()
     this.middlewares()
-
-    //Definir las rutas
     this.routes()
   }
 
-  //TODO: conectar BD
+  async dbConnection() {
+    try {
+      await db.authenticate()
+      console.log('Database online')
+    } catch (error: any) {
+      throw new Error(error)
+    }
+  }
 
   middlewares() {
     //CORS
